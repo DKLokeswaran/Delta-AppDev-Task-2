@@ -2,6 +2,7 @@ package com.example.delta_appdev_task_2;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -15,6 +16,7 @@ public class ball {
     private pad ForBall=new pad();
     private int score=0;
     private interfaceListner interfaceListner;
+//    private MediaPlayer sound;
 
     public ball( int rad, boolean isPlaying) {
 
@@ -71,30 +73,49 @@ public class ball {
             controller=3;
             if (interfaceListner!=null){
                 interfaceListner.switcher(score);
+                interfaceListner.sound(1);
             }
         }
         else if ((cy ) < rad) {
             vy = -vy;
+            if (interfaceListner!=null){
+                interfaceListner.sound(2);
+            }
 
         }
         else if (((ForBall.getRect().top - cy-rad) < rad)&&((ForBall.getRect().top - cy-rad)>0)&&(cx+1>ForBall.getRect().left)&&(cx<ForBall.getRect().right+1)&&(ForBall!=null)) {
             vy = -vy;
             score++;
             interfaceListner.scorer(score);
+            if (interfaceListner!=null){
+                interfaceListner.sound(3);
+            }
 
         }
 
         if ((width - cx) <rad) {
             vx = -vx;
+            if (interfaceListner!=null){
+                interfaceListner.sound(2);
+            }
         }
         else if (( (cx ) <rad)) {
             vx = -vx;
+            if (interfaceListner!=null){
+                interfaceListner.sound(2);
+            }
         }
         else if(((ForBall.getRect().left-cx)<rad)&&(ForBall.getRect().top<cy)&&(ForBall.getRect().bottom>cy)&&(vx>0)&&((ForBall.getRect().left-cx)>0)&&(ForBall!=null)){
             vx=-vx;
+            if (interfaceListner!=null){
+                interfaceListner.sound(3);
+            }
         }
         else if(((cx-ForBall.getRect().right)<rad)&&((cx-ForBall.getRect().right)>0)&&(ForBall.getRect().top<cy)&&(ForBall.getRect().bottom>cy)&&(vx<0)&&((cx-ForBall.getRect().right)>0)&&(ForBall!=null)){
             vx=-vx;
+            if (interfaceListner!=null){
+                interfaceListner.sound(3);
+            }
         }
     return controller;
     }

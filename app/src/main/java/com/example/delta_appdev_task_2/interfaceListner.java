@@ -5,4 +5,5 @@ public interface interfaceListner {
     void scorer(int b);
     void display();
     void hide();
+    void sound(int s);
 }

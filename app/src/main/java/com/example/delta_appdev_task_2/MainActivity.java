@@ -3,6 +3,7 @@ package com.example.delta_appdev_task_2;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -58,5 +59,20 @@ public class MainActivity extends AppCompatActivity implements interfaceListner{
     @Override
     public void hide() {
         disp.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void sound(int s) {
+        switch (s){
+            case 1:MediaPlayer sound=MediaPlayer.create(this,R.raw.gameover);
+                sound.start();
+                break;
+            case 2:MediaPlayer sound1=MediaPlayer.create(this,R.raw.collision);
+                sound1.start();
+                break;
+            case 3:MediaPlayer sound2=MediaPlayer.create(this,R.raw.padsound);
+                sound2.start();
+                break;
+        }
     }
 }
