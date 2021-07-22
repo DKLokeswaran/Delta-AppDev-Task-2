@@ -53,7 +53,7 @@ public class CustomView2 extends View {
             ball1.setCy(getHeight()/2);
             ball1.setVelocity();
         }
-        a=ball1.started();
+        a=ball1.started(false);
         ball2.setWidth(getWidth());
         ball2.setHeight(getHeight());
         if(b==0){
@@ -61,7 +61,7 @@ public class CustomView2 extends View {
             ball2.setCy(getHeight()/2);
             ball2.setVelocity();
         }
-        b=ball2.started();
+        b=ball2.started(false);
         ball3.setWidth(getWidth());
         ball3.setHeight(getHeight());
         if(c==0){
@@ -69,7 +69,7 @@ public class CustomView2 extends View {
             ball3.setCy(getHeight()/2);
             ball3.setVelocity();
         }
-        c=ball3.started();
+        c=ball3.started(false);
         ball4.setWidth(getWidth());
         ball4.setHeight(getHeight());
         if(d==0){
@@ -77,7 +77,7 @@ public class CustomView2 extends View {
             ball4.setCy(getHeight()/2);
             ball4.setVelocity();
         }
-        d=ball4.started();
+        d=ball4.started(false);
         canvas.drawColor(Color.parseColor("#1e14e0"));
         canvas.drawCircle(ball1.getCx(), ball1.getCy(), ball1.getRad(), bgrd);
         canvas.drawCircle(ball2.getCx(), ball2.getCy(), ball2.getRad(), bgrd);

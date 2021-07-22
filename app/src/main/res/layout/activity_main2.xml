@@ -30,7 +30,7 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Play:Wall MODE"
+        android:text="Wall MODE"
         android:onClick="start"
         android:textSize="10sp"
         android:backgroundTint="@color/black"
