@@ -18,6 +18,7 @@ public class CustomView extends View {
     private ball baller = new ball(15, false);
     private pad padder=new pad();
     private interfaceListner interfaceListner;
+    boolean isHard;
 
 
 
@@ -66,20 +67,33 @@ public class CustomView extends View {
 
 
     public void gravity() {
+        interfaceListner.hide2(false);
         if (c == 1) {
             c = 2;
-        } else {
-            c = 1;
         }
+        else if((c==0)||c==2){
+            if(isHard){
+                c=4;
+            }
+            else {
+                c=1;
+            }
+        }
+        else if(c==4){
+            c=2;
+        }
+
     }
     public void def(){
         if(c!=3){
             c=0;
             interfaceListner.scorer(0);
         }
-
     }
 
+    public void changer(boolean d){
+        isHard=d;
+    }
 
     public com.example.delta_appdev_task_2.ball getBaller() {
         return baller;
@@ -101,20 +115,21 @@ public class CustomView extends View {
                    baller.setForBall(padder);
                    baller.setVelocity();
                    baller.setScore(0);
+                   interfaceListner.hide2(true);
                    break;
             case 1:
-                c=baller.started();
+                c=baller.started(false);
                 break;
             case 2:baller.setPlaying(false);
                     interfaceListner.display();
                     break;
+            case 4: int a=baller.started(true);
+                break;
             default:
                 break;
         }
 
-//        if(c==2){
-//            canvas.drawText("Game is paused. Tap to resume",w/2,h/2,text);
-//        }
+
         canvas.drawColor(Color.parseColor("#1e14e0"));
         canvas.drawCircle(baller.getCx(), baller.getCy(), baller.getRad(), ballFiller);
         canvas.drawCircle(baller.getCx(), baller.getCy(), baller.getRad(), ballStroke);
@@ -131,7 +146,7 @@ public class CustomView extends View {
                 (event.getAction()==MotionEvent.ACTION_MOVE)){
             float x=event.getX();
             float y=event.getY();
-            if(c==1){
+            if((c==1)||(c==4)){
                 do {
                     if((y>padder.getRect().top-150)&&(y<padder.getRect().bottom)){
                         if((x<w/2)&&(padder.getRect().left!=0)){

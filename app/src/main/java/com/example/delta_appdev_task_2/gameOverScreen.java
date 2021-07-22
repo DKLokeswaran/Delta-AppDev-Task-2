@@ -16,7 +16,9 @@ public class gameOverScreen extends AppCompatActivity {
     private Button back;
     private int score;
     private int highscore[]={0,0,0};
-    private TextView scrDsp,msgDsp,hiScoreDsp;
+    private int Highscore[]={0,0,0};
+    private TextView scrDsp,msgDsp,hiScoreDsp,modeDsp;
+    private boolean checker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,25 +30,50 @@ public class gameOverScreen extends AppCompatActivity {
         hiScoreDsp=findViewById(R.id.highScr);
         back=findViewById(R.id.mainmenu);
         scrDsp=findViewById(R.id.scoreDisplay);
+        modeDsp=findViewById(R.id.textView7);
         Intent intent=getIntent();
         score=intent.getIntExtra("score",0);
+        checker=intent.getBooleanExtra("isHard",false);
         getHighScore();
-        for (int i=1;i<=3;i++){
-            if(score>highscore[i-1]){
-                int k=3-i;
-                while (k>0){
-                    highscore[k]=highscore[k-1];
-                    k--;
+        if(checker){
+            for (int i=1;i<=3;i++){
+                if(score>Highscore[i-1]){
+                    int k=3-i;
+                    while (k>0){
+                        Highscore[k]=Highscore[k-1];
+                        k--;
+                    }
+                    Highscore[i-1]=score;
+                    break;
                 }
-                highscore[i-1]=score;
-                break;
             }
+            if(Highscore[0]<=score){
+                msgDsp.setText("Congrats, this is a new high score");
+            }
+            hiScoreDsp.setText("High Score: "+Highscore[0]);
+            modeDsp.setText("Mode:Hard");
+            scrDsp.setText("You scored "+score);
         }
-        if(highscore[0]<=score){
-            msgDsp.setText("Congrats, this is a new high score");
+        else {
+            for (int i=1;i<=3;i++){
+                if(score>highscore[i-1]){
+                    int k=3-i;
+                    while (k>0){
+                        highscore[k]=highscore[k-1];
+                        k--;
+                    }
+                    highscore[i-1]=score;
+                    break;
+                }
+            }
+            if(highscore[0]<=score){
+                msgDsp.setText("Congrats, this is a new high score");
+            }
+            hiScoreDsp.setText("High Score: "+highscore[0]);
+            modeDsp.setText("Mode:Easy");
+            scrDsp.setText("You scored "+score);
         }
-        hiScoreDsp.setText("High Score: "+highscore[0]);
-        scrDsp.setText("You scored "+score);
+
         saveHighscore();
     }
     public void backto(View view){
@@ -65,6 +92,9 @@ public class gameOverScreen extends AppCompatActivity {
         for(int i=1;i<=3;i++){
             editor.putInt("highScore"+i,highscore[i-1]);
         }
+        for(int i=1;i<=3;i++){
+            editor.putInt("HighScore"+i,Highscore[i-1]);
+        }
         editor.commit();
     }
     public void getHighScore(){
@@ -72,5 +102,9 @@ public class gameOverScreen extends AppCompatActivity {
         for (int i=1;i<=3;i++){
             highscore[i-1]=sharedPreferences.getInt("highScore"+i,0);
         }
+        for (int i=1;i<=3;i++){
+            Highscore[i-1]=sharedPreferences.getInt("HighScore"+i,0);
+        }
     }
 }
+

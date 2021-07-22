@@ -1,22 +1,18 @@
 package com.example.delta_appdev_task_2;
 
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.media.MediaPlayer;
-import android.widget.TextView;
 
 import java.util.Random;
 
 public class ball {
-    private int rad,height,width;
+    private int rad,height,width,theta;
     private double vx,vy,cx,cy;
     private boolean isPlaying;
-    private final int velocity=15;
+    private int velocity;
     private Random random=new Random();
     private pad ForBall=new pad();
     private int score=0;
     private interfaceListner interfaceListner;
-//    private MediaPlayer sound;
+
 
     public ball( int rad, boolean isPlaying) {
 
@@ -27,16 +23,33 @@ public class ball {
 
     }
     public void setVelocity(){
-        int theta=random.nextInt(120)+31;
-//        float theta = 80.4f;
+        velocity=15;
+        if(interfaceListner!=null){
+            int x=random.nextInt(45)+1;
+            int t=random.nextInt(2);
+            theta=105+x-(75*t);
+        }
+        else {
+            theta=random.nextInt(120)+31;
+        }
+//        float theta = 90;
         vx=velocity*Math.cos(Math.toRadians(theta));
         vy=velocity*Math.sin(Math.toRadians(theta));
     }
-    public int started(){
-        int gamer=collisionDetector();
+    public void resetVelocity(){
+        velocity+=1;
+        double theta1=Math.atan(vy/vx);
+        if(theta1<0){
+            theta1+=Math.toRadians(180);
+        }
+        vx=velocity*Math.cos(theta1);
+        vy=velocity*Math.sin(theta1);
+    }
+    public int started(boolean b){
+        int gamer;
+        gamer=collisionDetector(b);
         cx+=vx;
         cy+=vy;
-
         isPlaying=true;
         return gamer;
     }
@@ -66,13 +79,13 @@ public class ball {
     public float getCy() {
         return (float) cy;
     }
-    public int collisionDetector() {
+    public int collisionDetector(boolean bool) {
         int controller=1;
         if ((height - cy) < rad) {
             vy = -vy;
             controller=3;
             if (interfaceListner!=null){
-                interfaceListner.switcher(score);
+                interfaceListner.switcher(score,bool);
                 interfaceListner.sound(1);
             }
         }
@@ -84,6 +97,9 @@ public class ball {
 
         }
         else if (((ForBall.getRect().top - cy-rad) < rad)&&((ForBall.getRect().top - cy-rad)>0)&&(cx+1>ForBall.getRect().left)&&(cx<ForBall.getRect().right+1)&&(ForBall!=null)) {
+            if(bool){
+                resetVelocity();
+            }
             vy = -vy;
             score++;
             interfaceListner.scorer(score);
