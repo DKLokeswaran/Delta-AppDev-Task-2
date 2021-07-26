@@ -27,4 +27,8 @@ public class MainActivity2 extends AppCompatActivity {
     public void exit(View v){
         this.finishAffinity();
     }
+    public void start2(View v){
+        Intent intent=new Intent(MainActivity2.this,compMode.class);
+        startActivity(intent);
+    }
 }

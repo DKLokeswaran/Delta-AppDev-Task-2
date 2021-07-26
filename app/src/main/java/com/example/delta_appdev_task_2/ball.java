@@ -1,3 +1,4 @@
+
 package com.example.delta_appdev_task_2;
 
 
@@ -85,7 +86,7 @@ public class ball {
             vy = -vy;
             controller=3;
             if (interfaceListner!=null){
-                interfaceListner.switcher(score,bool);
+                interfaceListner.switcher(score,bool,0);
                 interfaceListner.sound(1);
             }
         }
@@ -102,7 +103,7 @@ public class ball {
             }
             vy = -vy;
             score++;
-            interfaceListner.scorer(score);
+            interfaceListner.scorer(score,0);
             if (interfaceListner!=null){
                 interfaceListner.sound(3);
             }
@@ -133,7 +134,7 @@ public class ball {
                 interfaceListner.sound(3);
             }
         }
-    return controller;
+        return controller;
     }
 
     public int getRad() {
@@ -161,6 +162,6 @@ public class ball {
     }
 
     public void setListner(interfaceListner il){
-          this.interfaceListner=il;
+        this.interfaceListner=il;
     }
 }

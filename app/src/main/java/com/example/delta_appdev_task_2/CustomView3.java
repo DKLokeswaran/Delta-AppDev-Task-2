@@ -10,39 +10,35 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-public class CustomView extends View {
+public class CustomView3 extends View {
 
     private int c = 0;
-    private float h,w;
-    private Paint ballFiller,ballStroke,padStroke,text;
-    private ball baller = new ball(15, false);
+    private float h,w,x;
+    private Paint ballFiller,ballStroke,padStroke,liner;
+    private ball2 baller = new ball2(15, false);
     private pad padder=new pad();
+    private pad padComp=new pad();
     private interfaceListner interfaceListner;
     boolean isHard;
-
-
-
-
-    public CustomView(Context context) {
+    public CustomView3(Context context) {
         super(context);
         initializer(null);
     }
 
-    public CustomView(Context context, AttributeSet attrs) {
+    public CustomView3(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initializer(attrs);
     }
 
-    public CustomView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomView3(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initializer(attrs);
     }
 
-    public CustomView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CustomView3(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initializer(attrs);
     }
-
     private void initializer(@Nullable AttributeSet attributeSet) {
         ballFiller = new Paint(Paint.ANTI_ALIAS_FLAG);
         ballFiller.setColor(Color.parseColor("#ffffff"));
@@ -55,10 +51,10 @@ public class CustomView extends View {
         padStroke.setStrokeWidth(baller.getRad());
         padStroke.setColor(Color.parseColor("#000000"));
         padder.setPadVelocity(10);
-        text=new Paint(Paint.ANTI_ALIAS_FLAG);
-        text.setColor(Color.parseColor("#000000"));
-        text.setTextAlign(Paint.Align.CENTER);
-        text.setTextSize(100);
+        liner=new Paint(Paint.ANTI_ALIAS_FLAG);
+        liner.setStrokeWidth(10);
+        liner.setColor(Color.parseColor("#000000"));
+
     }
     public void setListner(interfaceListner il){
         this.interfaceListner=il;
@@ -67,38 +63,29 @@ public class CustomView extends View {
 
 
     public void gravity() {
+        if(isHard){
+            padComp.setPadVelocity(20);
+        }
+        else {
+            padComp.setPadVelocity(5);
+        }
         interfaceListner.hide2(false);
         if (c == 1) {
             c = 2;
         }
         else if((c==0)||c==2){
-            if(isHard){
-                c=4;
-            }
-            else {
-                c=1;
-            }
+            c=1;
         }
-        else if(c==4){
-            c=2;
-        }
+    }
 
-    }
-    public void def(){
-        if(c!=3){
-            c=0;
-            interfaceListner.scorer(0,0);
-        }
-    }
 
     public void changer(boolean d){
         isHard=d;
     }
 
-    public com.example.delta_appdev_task_2.ball getBaller() {
+    public com.example.delta_appdev_task_2.ball2 getBaller() {
         return baller;
     }
-
     @Override
     protected void onDraw(Canvas canvas) {
         h = getHeight();
@@ -107,27 +94,27 @@ public class CustomView extends View {
         baller.setHeight(h);
         padder.setWidth(w);
         padder.setHeight(h);
+        padComp.setWidth(w);
+        padComp.setHeight(h);
         if(interfaceListner!=null){
             interfaceListner.hide();
         }
         switch (c) {
             case 0:baller.setCx(w/2);
-                   baller.setCy(h/2);
-                   padder.setPad(50,240,0);
-                   baller.setForBall(padder);
-                   baller.setVelocity();
-                   baller.setScore(0);
-                   if(interfaceListner!=null){
-                       interfaceListner.hide2(true);
-                   }
-                   break;
+                baller.setCy(h/2);
+                padder.setPad(50,240,0);
+                padComp.setPad(50,240,1);
+                baller.setForBall(padder);
+                baller.setForComp(padComp);
+                baller.setVelocity();
+                break;
             case 1:
-                c=baller.started(false);
+                c=baller.started(true,isHard);
+                x=baller.getcor();
+                moveComp(x);
                 break;
             case 2:baller.setPlaying(false);
-                    interfaceListner.display();
-                    break;
-            case 4: int a=baller.started(true);
+                interfaceListner.display();
                 break;
             default:
                 break;
@@ -135,14 +122,15 @@ public class CustomView extends View {
 
 
         canvas.drawColor(Color.parseColor("#1e14e0"));
+        canvas.drawLine(0,h/2,w,h/2,liner);
         canvas.drawCircle(baller.getCx(), baller.getCy(), baller.getRad(), ballFiller);
         canvas.drawCircle(baller.getCx(), baller.getCy(), baller.getRad(), ballStroke);
         canvas.drawRect(padder.getRect(), ballFiller);
         canvas.drawRect(padder.getRect(), padStroke);
+        canvas.drawRect(padComp.getRect(), ballFiller);
+        canvas.drawRect(padComp.getRect(), padStroke);
         postInvalidate();
-
     }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean value=true;
@@ -153,10 +141,10 @@ public class CustomView extends View {
             if((c==1)||(c==4)){
                 do {
                     if((y>padder.getRect().top-150)&&(y<padder.getRect().bottom)){
-                        if((x<w/2)&&(padder.getRect().left!=0)){
+                        if((x<w/2)&&(padder.getRect().left>0)){
                             padder.padMover(-padder.getPadVelocity());
                         }
-                        if ((x>w/2)&&(padder.getRect().right!=w)){
+                        if ((x>w/2)&&(padder.getRect().right<w)){
                             padder.padMover(padder.getPadVelocity());
                         }
                     }
@@ -164,21 +152,21 @@ public class CustomView extends View {
             }
 
 
-            if((event.getAction()==MotionEvent.ACTION_DOWN)&&(c==3)){
-                c=0;
-            }
-            else {
                 if(event.getAction()==MotionEvent.ACTION_DOWN){
                     if(y<padder.getRect().top-150)
                         if(x<w)
                             gravity();
-                }
+
             }
         }
-
-
         return value;
     }
-
+    public void moveComp(float a){
+        if((a>padComp.getRect().centerX())&&(padComp.getRect().right<w)){
+            padComp.padMover(padComp.getPadVelocity());
+        }
+        if((a<padComp.getRect().centerX())&&(padComp.getRect().left>0)){
+            padComp.padMover(-padComp.getPadVelocity());
+        }
+    }
 }
-

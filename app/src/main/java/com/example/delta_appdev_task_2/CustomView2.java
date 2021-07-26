@@ -88,6 +88,5 @@ public class CustomView2 extends View {
         canvas.drawCircle(ball3.getCx(), ball3.getCy(), ball3.getRad(), bgrdStroke);
         canvas.drawCircle(ball4.getCx(), ball4.getCy(), ball4.getRad(), bgrdStroke);
         invalidate();
-
     }
 }

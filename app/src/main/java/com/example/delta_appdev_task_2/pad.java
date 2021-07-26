@@ -8,9 +8,15 @@ public class pad {
 
 
 
-    public void setPad(float height, float width){
-        rect.bottom=this.height;
-        rect.top=this.height-height;
+    public void setPad(float height, float width,int a){
+       if(a==0){
+           rect.bottom=this.height;
+           rect.top=this.height-height;
+       }
+       else {
+           rect.top=0;
+           rect.bottom=height;
+       }
         rect.right=(this.width+width)/2;
         rect.left=(this.width-width)/2;
     }

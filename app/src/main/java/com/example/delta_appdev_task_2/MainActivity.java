@@ -45,16 +45,16 @@ public class MainActivity extends AppCompatActivity implements interfaceListner{
 
 
     @Override
-    public void switcher(int var,boolean var2) {
+    public void switcher(int var,boolean var2,int b) {
         Intent intent=new Intent(MainActivity.this,gameOverScreen.class);
-            intent.putExtra("score",var);
-            intent.putExtra("isHard",var2);
+        intent.putExtra("score",var);
+        intent.putExtra("isHard",var2);
         startActivity(intent);
         finish();
     }
 
     @Override
-    public void scorer(int b) {
+    public void scorer(int b,int c) {
         scr.setText(Integer.toString(b));
     }
 
